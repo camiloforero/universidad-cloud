@@ -1,9 +1,33 @@
 {% extends "admin/base_site.html" %}
 {% block content %}
 <h1></h1>
-TODO: Agregar acá la manera de listar todos los proyectos, de acuerdo al proyecto al cual pertenecen
-{% for diseño in diseño_list %}
-{{diseño}}
-<br/>
-{% endfor %}
+<table class="table table-responsive">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Nombres</th>
+      <th>Apellidos</th>
+      <th>Fecha de creación</th>
+      <th>Estado</th>
+      <th>Archivo original</th>
+      <th>Archivo procesado</th>
+      <th>Previsualización</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for diseño in diseño_list %}
+    <tr>
+      <td>{{diseño.email}}</td>
+      <td>{{diseño.nombres}}</td>
+      <td>{{diseño.apellidos}}</td>
+      <td>{{diseño.fecha_creacion}}</td>
+      <td>{{diseño.estado}}</td>
+      <td><a href="{{diseño.archivo_original}}">Descargar</a></td>
+      <td><a href="{{diseño.archivo_procesado}}">Descargar</a></td>
+      <td><img src="{{diseño.archivo_original}}"/></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

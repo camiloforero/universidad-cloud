@@ -87,6 +87,11 @@ class Proyecto(models.Model):
         return self.nombre
 
 
+class DiseñosSet(models.QuerySet):
+    def disponibles(self):
+        return self.filter(estado="D")
+
+
 class Diseño(models.Model):
     EN_PROCESO = "EP"
     DISPONIBLE = "D"
@@ -106,6 +111,7 @@ class Diseño(models.Model):
         max_digits=10)
     archivo_original = models.ImageField("Diseño original")
     archivo_procesado = models.ImageField("Diseño procesado", null=True)
+    objects = DiseñosSet.as_manager()
 
     def __str__(self):
         return str(self.proyecto) + " " + self.estado

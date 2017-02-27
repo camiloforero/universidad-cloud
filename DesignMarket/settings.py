@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "cloud-iter-1.camiloforero.me",
-    "camiloforero.me"
+    "camiloforero.me",
+    "localhost",
 ]
 
 

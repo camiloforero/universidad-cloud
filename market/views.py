@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.text import slugify
@@ -60,7 +61,14 @@ class CrearDiseñoView(CreateView):
         try:
             form.instance.proyecto = proyecto
             form.instance.estado = models.Diseño.EN_PROCESO
-            return super(CrearDiseñoView, self).form_valid(form)
+            success = super(CrearDiseñoView, self).form_valid(form)
+            send_mail(
+                "Gracias por subir tu diseño, %s" % form.instance.nombres,
+                "Hemos recibido tu diseño y lo estamos procesando para que sea publicado",
+                "ce.forero2551@uniandes.edu.co",
+                [form.instance.email]
+            )
+            return success
         except Exception as e:
             raise e
 
