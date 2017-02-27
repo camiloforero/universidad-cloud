@@ -25,7 +25,10 @@ SECRET_KEY = '*3=4eaf6-=wzxxka)09k3f470)ex1z2mad$-c#=%e6@_a4_h4a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "cloud-iter-1.camiloforero.me",
+    "camiloforero.me"
+]
 
 
 # Application definition

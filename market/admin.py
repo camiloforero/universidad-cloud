@@ -25,10 +25,13 @@ class DesignMatchAdminSite(admin.AdminSite):
 
     def each_context(self, request):
         dict = super(DesignMatchAdminSite, self).each_context(request)
-        dict["site_url"] = reverse_lazy(
-            'market:homepage',
-            kwargs={"slug_empresa": "%s" %
-                    request.user.administrador.slug_empresa})
+        try:
+            dict["site_url"] = reverse_lazy(
+                'market:homepage',
+                kwargs={"slug_empresa": "%s" %
+	    	        request.user.administrador.slug_empresa})
+        except:
+            pass
         return dict
 
 
