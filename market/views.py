@@ -7,6 +7,9 @@ from django.utils.text import slugify
 from django.urls import reverse_lazy
 from . import forms, models
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 from vanilla import TemplateView, FormView, CreateView, DetailView
 
 
@@ -46,6 +49,7 @@ class EmpresaHomepageView(DetailView):
     context_object_name = "administrador"
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CrearDiseñoView(CreateView):
     template_name = "market/form.html"
     form_class = forms.CreateDiseñoForm
@@ -62,12 +66,16 @@ class CrearDiseñoView(CreateView):
             form.instance.proyecto = proyecto
             form.instance.estado = models.Diseño.EN_PROCESO
             success = super(CrearDiseñoView, self).form_valid(form)
-            send_mail(
-                "Gracias por subir tu diseño, %s" % form.instance.nombres,
-                "Hemos recibido tu diseño y lo estamos procesando para que sea publicado",
-                "ce.forero2551@uniandes.edu.co",
-                [form.instance.email]
-            )
+            try:
+                send_mail(
+                    "Gracias por subir tu diseño, %s" % form.instance.nombres,
+                    "Hemos recibido tu diseño y lo estamos procesando para que sea publicado",
+                    "ce.forero2551@uniandes.edu.co",
+                    [form.instance.email],
+                    fail_silently=True
+                )
+            except:
+                print("error al enviar el correo")
             return success
         except Exception as e:
             raise e

@@ -124,5 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/cloud-iter-1.camiloforero.me/public_html/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/var/www/cloud-iter-1.camiloforero.me/public_html/media/'
 
 AUTH_USER_MODEL = 'market.User'
