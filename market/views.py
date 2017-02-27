@@ -42,13 +42,27 @@ class EmpresaHomepageView(DetailView):
     model = models.Administrador
     lookup_field = "slug_empresa"
     lookup_url_kwarg = "slug_empresa"
-    #TODO: Agregarle el contexto adecuado a este template, para que muestre todos los diseños
+    context_object_name = "administrador"
 
 
 class CrearDiseñoView(CreateView):
     template_name = "market/form.html"
     form_class = forms.CreateDiseñoForm
-    #TODO: Comportamiento para que guarde el diseño de forma correcta
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'market:homepage',
+            kwargs={"slug_empresa": "%s" %
+                    self.request.user.administrador.slug_empresa})
+
+    def form_valid(self, form):
+        proyecto = models.Proyecto.objects.get(pk=self.kwargs["proyecto_id"])
+        try:
+            form.instance.proyecto = proyecto
+            form.instance.estado = models.Diseño.EN_PROCESO
+            return super(CrearDiseñoView, self).form_valid(form)
+        except Exception as e:
+            raise e
 
 
 # Create your views here.

@@ -107,5 +107,11 @@ class Diseño(models.Model):
     archivo_original = models.ImageField("Diseño original")
     archivo_procesado = models.ImageField("Diseño procesado", null=True)
 
+    def __str__(self):
+        return str(self.proyecto) + " " + self.estado
+
+    class Meta():
+        ordering = ['proyecto', '-fecha_creacion']
+
 
 # Create your models here.

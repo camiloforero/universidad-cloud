@@ -1,0 +1,8 @@
+Django==1.10.5
+Pillow==4.0.0
+django-money==0.10.2
+django-vanilla-views==1.0.4
+django-widget-tweaks==1.4.1
+olefile==0.44
+py-moneyed==0.6.0
+pycodestyle==2.3.1

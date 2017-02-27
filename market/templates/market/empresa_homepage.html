@@ -5,8 +5,12 @@
 <h1>{{object.homepage}}</h1>
 TODO: Acá va una lista de todos los diseñosespecie de homepage de la empresa. Esta debe mostrar una agrupación de todos los proyectos, y para
 cada uno de estos los diseños que han sido subidos. Dentro de cada proyecto debe haber un link que permita subir un diseño nuevo
-{% for diseño in object_list %}
-{{diseño}}
-<br/>
+{% for proyecto in administrador.proyectos.all %}
+  {{proyecto}}
+  <br/>
+  {% for diseño in proyecto.diseños.all %}
+  {{diseño}}
+  <br/>
+  {% endfor %}
 {% endfor %}
 {% endblock %}
