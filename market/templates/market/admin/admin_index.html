@@ -11,7 +11,7 @@
 
 {% block content %}
 <div id="content-main">
-
+<p>Bienvenido! recuerda que tu url personal es {{request.user.administrador.slug_empresa}}</p>
 {% if app_list %}
     {% for app in app_list %}
         <div class="app-{{ app.app_label }} module">
@@ -46,9 +46,6 @@
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}
-TEST dentro del Div
-TEST Fuera del Div
-<a href="{% url "design_match_admin:listaDiseños" %}">Ver lista de diseños</a>
 </div>
 
 {% endblock %}

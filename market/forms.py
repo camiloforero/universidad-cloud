@@ -1,5 +1,5 @@
 from django import forms
-from .models import Administrador
+from .models import Administrador, Diseño
 
 
 class CreateAccountForm(forms.ModelForm):
@@ -14,3 +14,9 @@ class CreateAccountForm(forms.ModelForm):
             'contraseña': forms.PasswordInput(),
             'contraseña2': forms.PasswordInput(),
         }
+
+
+class CreateDiseñoForm(forms.ModelForm):
+    class Meta:
+        model = Diseño
+        fields = ['nombres', 'apellidos', 'email', 'archivo_original', 'precio_solicitado']

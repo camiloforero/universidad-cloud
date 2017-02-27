@@ -18,5 +18,5 @@ from market import admin
 
 urlpatterns = [
     url(r'^diseños/', admin.admin_site.urls),
-    url(r'^clientes/', include('market.urls')),
+    url(r'^clientes/', include('market.urls', namespace='market')),
 ]

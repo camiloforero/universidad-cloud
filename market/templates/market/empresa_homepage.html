@@ -1,0 +1,12 @@
+{% extends "market/base.html" %}
+{% block title %}{{request.user.administrador.nombre_empresa}}{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+<h1>{{object.homepage}}</h1>
+TODO: Acá va una lista de todos los diseñosespecie de homepage de la empresa. Esta debe mostrar una agrupación de todos los proyectos, y para
+cada uno de estos los diseños que han sido subidos. Dentro de cada proyecto debe haber un link que permita subir un diseño nuevo
+{% for diseño in object_list %}
+{{diseño}}
+<br/>
+{% endfor %}
+{% endblock %}

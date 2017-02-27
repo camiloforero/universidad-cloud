@@ -4,8 +4,8 @@
 {% block title %}{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
-{{ form_message }}
 <div class="row">
+{{ form_message }}
 <form action="{{ url }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.media}}

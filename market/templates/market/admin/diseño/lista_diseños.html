@@ -1,4 +1,9 @@
 {% extends "admin/base_site.html" %}
 {% block content %}
-SI SIRVE EHTA TAMBIEN
+<h1></h1>
+TODO: Agregar acá la manera de listar todos los proyectos, de acuerdo al proyecto al cual pertenecen
+{% for diseño in object_list %}
+{{diseño}}
+<br/>
+{% endfor %}
 {% endblock %}
