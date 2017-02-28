@@ -54,15 +54,13 @@ class CrearDiseñoView(CreateView):
     template_name = "market/form.html"
     form_class = forms.CreateDiseñoForm
 
-    def get_success_url(self):
-        return reverse_lazy(
-            'market:homepage',
-            kwargs={"slug_empresa": "%s" %
-                    self.request.user.administrador.slug_empresa})
-
     def form_valid(self, form):
         proyecto = models.Proyecto.objects.get(pk=self.kwargs["proyecto_id"])
         try:
+            self.success_url = reverse_lazy(
+                'market:homepage',
+                kwargs={"slug_empresa": "%s" %
+                        proyecto.autor.slug_empresa})
             form.instance.proyecto = proyecto
             form.instance.estado = models.Diseño.EN_PROCESO
             success = super(CrearDiseñoView, self).form_valid(form)
