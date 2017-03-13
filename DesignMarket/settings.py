@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from . import private
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +27,7 @@ SECRET_KEY = '*3=4eaf6-=wzxxka)09k3f470)ex1z2mad$-c#=%e6@_a4_h4a'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "cloud-iter-1.camiloforero.me",
+    "iter-2-simple.camiloforero.me",
     "camiloforero.me",
     "localhost",
 ]
@@ -81,11 +82,14 @@ WSGI_APPLICATION = 'DesignMarket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'designmatch',
+        'USER': 'cloud',
+        'PASSWORD': private.DB_PASSWORD,
+        'HOST': private.DB_HOST,
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -124,8 +128,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/cloud-iter-1.camiloforero.me/public_html/static/'
+STATIC_ROOT = '/var/www/iter-2-simple/public_html/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/cloud-iter-1.camiloforero.me/public_html/media/'
+MEDIA_ROOT = '/var/www/iter-2-simple/public_html/media/'
 
 AUTH_USER_MODEL = 'market.User'
+
+
+#Email backend
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = private.AWS_SES_KEY
+AWS_SECRET_ACCESS_KEY = private.AWS_SES_SECRET
