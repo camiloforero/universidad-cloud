@@ -127,15 +127,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+FILES_ROOT = '/var/www/iter-2-simple/public_html'
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/iter-2-simple/public_html/static/'
+STATIC_ROOT = FILES_ROOT + STATIC_URL
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/iter-2-simple/public_html/media/'
+MEDIA_ROOT = FILES_ROOT + MEDIA_URL
 
 AUTH_USER_MODEL = 'market.User'
+LOGIN_URL = 'portal:login'
+LOGIN_REDIRECT_URL = 'portal:proyectos'
+LOGOUT_REDIRECT_URL = 'market:index'
 
 
 #Email backend
 EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-west-2'
+AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
 AWS_ACCESS_KEY_ID = private.AWS_SES_KEY
 AWS_SECRET_ACCESS_KEY = private.AWS_SES_SECRET
+

@@ -1,0 +1,3 @@
+PYTHONIOENCODING=utf8
+* * * * * /home/ubuntu/django/venvs/projectenv/bin/python /home/ubuntu/django/projects/universidad-cloud/manage.py procesar_fotos >> /tmp/cronlog_fotos.txt 2>&1
+

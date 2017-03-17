@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "market/base.html" %}
 {% block content %}
 <h1></h1>
 <table class="table table-responsive">
@@ -21,10 +21,10 @@
       <td>{{diseño.nombres}}</td>
       <td>{{diseño.apellidos}}</td>
       <td>{{diseño.fecha_creacion}}</td>
-      <td>{{diseño.estado}}</td>
+      <td>{{diseño.get_estado_display}}</td>
       <td><a href="{{diseño.archivo_original}}">Descargar</a></td>
       <td><a href="{{diseño.archivo_procesado}}">Descargar</a></td>
-      <td><img src="{{diseño.archivo_original}}"/></td>
+      <td><img style="width:20%" src="{{diseño.archivo_procesado.url}}"/></td>
     </tr>
     {% endfor %}
   </tbody>

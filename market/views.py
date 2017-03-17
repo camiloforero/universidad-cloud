@@ -20,7 +20,7 @@ class IndexView(TemplateView):
 class RegistroView(FormView):
     template_name = "market/form.html"
     form_class = forms.CreateAccountForm
-    success_url = reverse_lazy('design_match_admin:index')
+    success_url = reverse_lazy('portal:proyectos')
 
     def form_valid(self, form):
         user = models.User.objects.create_user(
@@ -35,7 +35,7 @@ class RegistroView(FormView):
                 allow_unicode=True)
             form.save()
             login(self.request, user)
-            return self.get_success_url()
+            return super(RegistroView, self).form_valid(form)
         except Exception as e:
             user.delete()
             raise e
@@ -64,16 +64,17 @@ class CrearDiseñoView(CreateView):
             form.instance.proyecto = proyecto
             form.instance.estado = models.Diseño.EN_PROCESO
             success = super(CrearDiseñoView, self).form_valid(form)
-            try:
-                send_mail(
-                    "Gracias por subir tu diseño, %s" % form.instance.nombres,
-                    "Hemos recibido tu diseño y lo estamos procesando para que sea publicado",
-                    "ce.forero2551@uniandes.edu.co",
-                    [form.instance.email],
-                    fail_silently=True
-                )
-            except:
-                print("error al enviar el correo")
+        #try:
+            send_mail(
+                "Gracias por subir tu diseño, %s" % form.instance.nombres,
+                "Hemos recibido tu diseño y lo estamos procesando para que sea publicado",
+                "ce.forero2551@uniandes.edu.co",
+                [form.instance.email],
+                fail_silently=False
+            )
+        #except e:
+            print("error al enviar el correo")
+            #print(e)
             return success
         except Exception as e:
             raise e

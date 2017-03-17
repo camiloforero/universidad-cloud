@@ -4,16 +4,12 @@ from .models import Administrador, Diseño
 
 class CreateAccountForm(forms.ModelForm):
     email = forms.EmailField(label='Correo electrónico')
-    contraseña = forms.CharField(label='Contraseña')
-    contraseña2 = forms.CharField(label='Confirmar contraseña')
+    contraseña = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+    contraseña2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
 
     class Meta:
         model = Administrador
         fields = ['nombre_empresa', 'email', 'contraseña', 'contraseña2']
-        widgets = {
-            'contraseña': forms.PasswordInput(),
-            'contraseña2': forms.PasswordInput(),
-        }
 
 
 class CreateDiseñoForm(forms.ModelForm):

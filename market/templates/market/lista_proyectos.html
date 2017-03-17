@@ -1,0 +1,35 @@
+{% extends "market/base.html" %}
+{% block header %}Bienvenido a la página de administración{% endblock %}
+{% block content %}
+<h4>Tu URL personal es <a href="{% url 'market:homepage' user.administrador.slug_empresa %}">{{request.get_host}}{% url 'market:homepage' user.administrador.slug_empresa %}</a></h4>
+<a href="{% url 'portal:nuevo_proyecto' %}" class="btn btn-default btn-lg">Crea uno nuevo</a>
+<table class="table table-responsive">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Valor estimado</th>
+      <th>Número de diseños</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for proyecto in proyecto_list %}
+    <tr>
+      <td>{{proyecto}}</td>
+      <td>{{proyecto.valor_estimado}}</td>
+      <td>{{proyecto.diseños.disponibles.count}}</td>
+      <td>
+          <a href="{% url 'portal:editar_proyecto' proyecto.pk %}" class="btn btn-default">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </a>
+          <a href="{% url 'portal:borrar_proyecto' proyecto.pk %}" class="btn btn-default">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+          </a>
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

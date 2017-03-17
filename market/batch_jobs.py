@@ -1,6 +1,6 @@
 from .models import Diseño
 
-from PIL import Image as Img
+from PIL import ImageDraw, ImageFont, Image as Img
 from io import BytesIO
 from django.core.files import File
 from django.core.mail import send_mail
@@ -11,6 +11,11 @@ def batch_converter():
     for diseño in diseños:
         image = Img.open(BytesIO(diseño.archivo_original.read()))
         image.thumbnail((800, 600), Img.ANTIALIAS)
+        font = ImageFont.truetype("DejaVuSans.ttf", 24)
+        width, height = image.size
+        draw = ImageDraw.Draw(image)
+        draw.text((30,height-30), "%s %s" % (diseño.nombres, diseño.apellidos), (255,255,255), font=font)
+        draw.text((width/2,height-30), str(diseño.fecha_creacion), (255,255,255), font=font)
         output = BytesIO()
         image.save(output, format='PNG', quality=75)
         output.seek(0)
@@ -24,3 +29,4 @@ def batch_converter():
         )
         diseño.save()
         print("Se ha procesado el diseño %s satisfactoriamente" % diseño)
+    print("Todos los diseños han sido procesados")

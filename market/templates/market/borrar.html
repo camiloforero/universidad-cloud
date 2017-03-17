@@ -1,0 +1,9 @@
+{% extends "market/base.html" %}
+{% block title %}{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+        <p>Está seguro que desea borrar este objeto?</p>
+        <input type="submit" value="Confirm" />
+</form>
+{% endblock %}
