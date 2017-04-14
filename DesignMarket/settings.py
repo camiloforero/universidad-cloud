@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 from . import private
 
+import requests
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,11 +29,26 @@ SECRET_KEY = '*3=4eaf6-=wzxxka)09k3f470)ex1z2mad$-c#=%e6@_a4_h4a'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "iter-2-simple.camiloforero.me",
-    "camiloforero.me",
+    ".camiloforero.me",
     "localhost",
 ]
 
+########## ALLOWED_HOSTS
+from requests.exceptions import ConnectionError
+
+try:
+    url = "http://169.254.169.254/latest/meta-data/local-ipv4"
+    r = requests.get(url)
+    instance_ip = r.text
+    ALLOWED_HOSTS += [instance_ip]
+    url = "http://169.254.169.254/latest/meta-data/public-hostname"
+    r = requests.get(url)
+    instance_ip = r.text
+    ALLOWED_HOSTS += [instance_ip]
+except ConnectionError:
+    error_msg = "You can only run production settings on an AWS EC2 instance"
+    raise ImproperlyConfigured(error_msg)
+########## END ALLOWED_HOSTS
 
 # Application definition
 

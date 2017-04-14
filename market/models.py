@@ -94,9 +94,11 @@ class DiseñosSet(models.QuerySet):
 
 
 class Diseño(models.Model):
+    SIN_PROCESAR = "SP"
     EN_PROCESO = "EP"
     DISPONIBLE = "D"
     ESTADO_CHOICES = (
+        (SIN_PROCESAR, "Sin procesar"),
         (EN_PROCESO, "En proceso"),
         (DISPONIBLE, "Disponible"),
     )

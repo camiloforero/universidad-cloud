@@ -7,8 +7,10 @@ from django.core.mail import send_mail
 
 
 def batch_converter():
-    diseños = Diseño.objects.filter(estado=Diseño.EN_PROCESO)
-    for diseño in diseños:
+    try:
+        diseño = Diseño.objects.filter(estado=Diseño.SIN_PROCESAR)[0]
+        diseño.estado = Diseño.EN_PROCESO
+        diseño.save()
         image = Img.open(BytesIO(diseño.archivo_original.read()))
         image.thumbnail((800, 600), Img.ANTIALIAS)
         font = ImageFont.truetype("DejaVuSans.ttf", 24)
@@ -29,4 +31,6 @@ def batch_converter():
         )
         diseño.save()
         print("Se ha procesado el diseño %s satisfactoriamente" % diseño)
-    print("Todos los diseños han sido procesados")
+    except IndexError:
+        print("No se encontraron diseños, esperando...")
+        time.sleep(5000)
