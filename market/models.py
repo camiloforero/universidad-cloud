@@ -67,30 +67,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class Administrador(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, models.CASCADE, related_name="administrador")
-    nombre_empresa = models.CharField("Nombre de la empresa", max_length=32)
-    slug_empresa = models.CharField(
-        "ID único", max_length=64, null=True, editable=False, unique=True)
-
-
 class Proyecto(models.Model):
-    nombre = models.CharField(" Nombre del proyecto", max_length=64)
+    nombre = models.CharField("Nombre del proyecto", max_length=64)
     descripción = models.TextField("Descripción del proyecto")
     valor_estimado = MoneyField(
         "Valor estimado del proyecto", default_currency="COP",
         decimal_places=2, max_digits=10)
-    autor = models.ForeignKey(
-        Administrador, models.CASCADE, related_name="proyectos")
+    #autor = models.ForeignKey(
+    #    Administrador, models.CASCADE, related_name="proyectos")
 
     def __str__(self):
         return self.nombre
 
-
-class DiseñosSet(models.QuerySet):
-    def disponibles(self):
-        return self.filter(estado="D")
 
 
 class Diseño(models.Model):
@@ -114,7 +102,6 @@ class Diseño(models.Model):
         max_digits=10)
     archivo_original = models.ImageField("Diseño original")
     archivo_procesado = models.ImageField("Diseño procesado", null=True)
-    objects = DiseñosSet.as_manager()
 
     def __str__(self):
         return str(self.proyecto) + " " + self.estado

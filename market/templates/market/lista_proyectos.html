@@ -1,7 +1,7 @@
 {% extends "market/base.html" %}
 {% block header %}Bienvenido a la página de administración{% endblock %}
 {% block content %}
-<h4>Tu URL personal es <a href="{% url 'market:homepage' user.administrador.slug_empresa %}">{{request.get_host}}{% url 'market:homepage' user.administrador.slug_empresa %}</a></h4>
+<h4>Tu URL personal es <a href="{% url 'market:homepage' slug_empresa %}">{{request.get_host}}{% url 'market:homepage' slug_empresa %}</a></h4>
 <a href="{% url 'portal:nuevo_proyecto' %}" class="btn btn-default btn-lg">Crea uno nuevo</a>
 <table class="table table-responsive">
   <thead>
@@ -15,14 +15,14 @@
   <tbody>
     {% for proyecto in proyecto_list %}
     <tr>
-      <td>{{proyecto}}</td>
+      <td>{{proyecto.nombre}}</td>
       <td>{{proyecto.valor_estimado}}</td>
-      <td>{{proyecto.diseños.disponibles.count}}</td>
+      <td>{{proyecto.diseños|length}}</td>
       <td>
-          <a href="{% url 'portal:editar_proyecto' proyecto.pk %}" class="btn btn-default">
+          <a href="{% comment %}{% url 'portal:editar_proyecto' proyecto.pk %}{% endcomment %}" class="btn btn-default">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
           </a>
-          <a href="{% url 'portal:borrar_proyecto' proyecto.pk %}" class="btn btn-default">
+          <a href="{% comment %}{% url 'portal:borrar_proyecto' proyecto.pk %}{% endcomment %}" class="btn btn-default">
               <i class="fa fa-trash-o" aria-hidden="true"></i>
           </a>
 

@@ -14,6 +14,7 @@ import os
 from . import private
 
 import requests
+import boto3
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'widget_tweaks',
     'market',
 ]
@@ -99,12 +101,8 @@ WSGI_APPLICATION = 'DesignMarket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'designmatch',
-        'USER': 'cloud',
-        'PASSWORD': private.DB_PASSWORD,
-        'HOST': private.DB_HOST,
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/home/ubuntu/django/projects/universidad-cloud/designmatch',
     }
 }
 
@@ -156,10 +154,48 @@ LOGIN_REDIRECT_URL = 'portal:proyectos'
 LOGOUT_REDIRECT_URL = 'market:index'
 
 
+#AWS authentication
+AWS_ACCESS_KEY_ID = private.AWS_SES_KEY
+AWS_SECRET_ACCESS_KEY = private.AWS_SES_SECRET
+
+
 #Email backend
 EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_REGION_NAME = 'us-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
-AWS_ACCESS_KEY_ID = private.AWS_SES_KEY
-AWS_SECRET_ACCESS_KEY = private.AWS_SES_SECRET
+
+
+#Storages
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'iter3-camiloforero'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = False
+AWS_LOCATION = 'Diseños'
+
+
+#Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'iter3-d-cache.sdc8zq.cfg.usw2.cache.amazonaws.com:11211',
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+
+#Tabla noSQL
+TABLA_EMPRESAS = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url="http://dynamodb.us-west-2.amazonaws.com", aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY).Table('empresas')
+DYNAMODB_ENDPOINT = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url="http://dynamodb.us-west-2.amazonaws.com", aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+
+
+#Celery and SQS settings
+CELERY_BROKER_URL = "sqs://" + AWS_ACCESS_KEY_ID + ":" + AWS_SECRET_ACCESS_KEY + "@"
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'region': 'eu-east-2',
+    'visibility_timeout': 60,
+    'polling_interval': 1
+}
 

@@ -1,10 +1,10 @@
 {% extends "market/base.html" %}
-{% block title %}{{request.user.administrador.nombre_empresa}}{% endblock %}
+{% block title %}{{administrador.nombre_empresa}}{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
 <h1 style="margin-top:80px">{{object.homepage}}</h1>
 <div class="container">
-  {% for proyecto in administrador.proyectos.all %}
+  {% for proyecto in proyectos %}
   <div class="panel panel-default col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="panel-heading">{{proyecto}} - {{proyecto.valor_estimado}}</div>
       <div class="panel-body">
@@ -12,7 +12,7 @@
         {{diseño.archivo_original}}
         {% endfor %}
       </div>
-      <a href="{% url "market:nuevo_diseño" proyecto_id=proyecto.id %}">
+      <a href="{% url "market:nuevo_diseño" slug_empresa=proyecto.slug_empresa nombre=proyecto.nombre %}">
         <div class="panel-footer">
           Enviar propuesta
         </div>

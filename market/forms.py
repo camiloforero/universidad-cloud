@@ -1,18 +1,21 @@
 from django import forms
-from .models import Administrador, Diseño
+from .models import Diseño
 
 
-class CreateAccountForm(forms.ModelForm):
+class CreateAccountForm(forms.Form):
     email = forms.EmailField(label='Correo electrónico')
+    nombre_empresa = forms.CharField(label='Nombre de la empresa')
     contraseña = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
     contraseña2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
 
-    class Meta:
-        model = Administrador
-        fields = ['nombre_empresa', 'email', 'contraseña', 'contraseña2']
+class CreateProyectoForm(forms.Form):
+    nombre = forms.CharField(label='Nombre del proyecto')
+    descripción = forms.CharField(label='Descripción del proyecto', widget=forms.Textarea)
+    valor_estimado = forms.DecimalField(label='Valor estimado del proyecto')
 
-
-class CreateDiseñoForm(forms.ModelForm):
-    class Meta:
-        model = Diseño
-        fields = ['nombres', 'apellidos', 'email', 'archivo_original', 'precio_solicitado']
+class CreateDiseñoForm(forms.Form):
+    nombres = forms.CharField(label='Nombres')
+    apellidos = forms.CharField(label='Apellidos')
+    email = forms.EmailField(label='Correo electrónico')
+    precio_solicitado = forms.DecimalField(label='Precio solicitado')
+    diseño_original = forms.FileField(label='Diseño')
