@@ -1,3 +1,4 @@
 *.pyc
 __pycache__/
 DesignMarket/private.py
+.env

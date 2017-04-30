@@ -104,8 +104,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'designmarket',
         'USER': 'cloud',
-        'PASSWORD': private.DB_PASSWORD,
-        'HOST': private.DB_HOST,
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
         'PORT': '5432',
     }
 }
@@ -160,8 +160,8 @@ LOGOUT_REDIRECT_URL = 'market:index'
 
 
 #AWS authentication
-AWS_ACCESS_KEY_ID = private.AWS_SES_KEY
-AWS_SECRET_ACCESS_KEY = private.AWS_SES_SECRET
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
 
 #Email backend
