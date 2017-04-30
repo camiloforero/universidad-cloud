@@ -6,10 +6,10 @@
 <div class="container">
   {% for proyecto in proyectos %}
   <div class="panel panel-default col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <div class="panel-heading">{{proyecto}} - {{proyecto.valor_estimado}}</div>
+    <div class="panel-heading">{{proyecto.nombre}} - {{proyecto.valor_estimado}}</div>
       <div class="panel-body">
-        {% for diseño in proyecto.diseños.disponibles %}
-        {{diseño.archivo_original}}
+        {% for diseño in proyecto.diseños %}
+        <img style='width: 30%' src='{{diseño.archivo_procesado}}' />
         {% endfor %}
       </div>
       <a href="{% url "market:nuevo_diseño" slug_empresa=proyecto.slug_empresa nombre=proyecto.nombre %}">

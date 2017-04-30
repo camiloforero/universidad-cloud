@@ -1,23 +1,23 @@
 from vanilla import ListView, CreateView, UpdateView, DeleteView, TemplateView, FormView
-from .models import Diseño, Proyecto
 from django.urls import reverse_lazy
 from django.conf import settings
 from boto3.dynamodb.conditions import Key, Attr
 from .forms import CreateProyectoForm
 
 
-class DiseñoListView(ListView):
-    model = Diseño
+class DiseñoListView(TemplateView):
     template_name = "market/lista_diseños.html"
 
-    def get_queryset(self):
-        return Diseño.objects.disponibles().filter(
-            proyecto_id=self.kwargs["proyecto_id"],
-            proyecto__autor_id=self.request.user.administrador)
-
     def get_context_data(self, **kwargs):
+        diseños_table = settings.DYNAMODB_ENDPOINT.Table('disenhos')        
+        slug = self.kwargs["slug_empresa"]
         context = super(DiseñoListView, self).get_context_data(**kwargs)
-        context["proyecto"] = self.kwargs["proyecto_id"]
+        diseños = diseños_table.query(
+            Select='ALL_ATTRIBUTES',
+            KeyConditionExpression=Key('id_diseño').eq(
+                '%s###%s' % (slug, self.kwargs['nombre_proyecto']))
+            )['Items']
+        context["diseños"] = diseños
         return context
 
 class ProyectoListView(TemplateView):
@@ -72,7 +72,6 @@ class CreateProyectoView(FormView):
 
 
 class UpdateProyectoView(UpdateView):
-    model = Proyecto
     template_name = "market/form.html"
     fields = ['nombre', 'descripción', 'valor_estimado']
     success_url = reverse_lazy("portal:proyectos")
@@ -80,7 +79,6 @@ class UpdateProyectoView(UpdateView):
 
 
 class DeleteProyectoView(DeleteView):
-    model = Proyecto
     success_url = reverse_lazy("portal:proyectos")
     lookup_url_kwarg = "proyecto_id"
     template_name = "market/borrar.html"

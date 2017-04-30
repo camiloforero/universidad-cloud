@@ -30,7 +30,7 @@ class RegistroView(FormView):
     success_url = reverse_lazy('portal:proyectos')
 
     def form_valid(self, form):
-        empresas = settings.TABLA_EMPRESAS
+        empresas = settings.DYNAMODB_ENDPOINT.Table('empresas')
         user = models.User.objects.create_user(
             email=form.cleaned_data['email'],
             password=form.cleaned_data['contraseña'], is_staff=True)
@@ -68,7 +68,9 @@ class EmpresaHomepageView(TemplateView):
     template_name = "market/empresa_homepage.html"
     lookup_url_kwarg = "slug_empresa"
     def get_context_data(self, **kwargs):
-        empresas = settings.TABLA_EMPRESAS
+        slug = self.kwargs['slug_empresa']
+        empresas = settings.DYNAMODB_ENDPOINT.Table('empresas')
+        diseños_table = settings.DYNAMODB_ENDPOINT.Table('disenhos')
         context = super(EmpresaHomepageView, self).get_context_data(**kwargs)
         empresa = empresas.get_item(
             Key={'slug_empresa': self.kwargs['slug_empresa']}
@@ -78,9 +80,15 @@ class EmpresaHomepageView(TemplateView):
         proyectos = proyectos_table.query(
             Select='ALL_ATTRIBUTES',
             KeyConditionExpression=Key('slug_empresa').eq(self.kwargs['slug_empresa'])
-        )
-        context['proyectos'] = proyectos['Items']
-        print(empresa['Item'])
+        )['Items']
+        for proyecto in proyectos:
+            proyecto['diseños'] = diseños_table.query(
+                Select='ALL_ATTRIBUTES',
+                KeyConditionExpression=Key('id_diseño').eq(
+                    '%s###%s' % (slug, proyecto['nombre'])),
+                FilterExpression=Attr('estado').eq(True)
+            )['Items']
+        context['proyectos'] = proyectos
         return context
 
 

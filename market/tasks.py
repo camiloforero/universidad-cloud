@@ -5,11 +5,13 @@ from io import BytesIO
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.core.mail import send_mail
+from django.conf import settings
 from datetime import datetime
 
 
 @shared_task
 def convertir_diseño(id_diseño, email, file_name, nombres, apellidos):
+    diseño_table = settings.DYNAMODB_ENDPOINT.Table('disenhos')
     storage = DefaultStorage()
     image = Img.open(storage.open(file_name))
     image.thumbnail((800, 600), Img.ANTIALIAS)
@@ -22,6 +24,13 @@ def convertir_diseño(id_diseño, email, file_name, nombres, apellidos):
     image.save(output, format='PNG', quality=75)
     output.seek(0)
     diseño_procesado_nombre = storage.save(file_name + ' - Procesado.png', File(output))
+    diseño_table.update_item(
+		Key={'id_diseño':id_diseño, 'email':email},
+		UpdateExpression='SET archivo_procesado = :procesado, estado = :estado',
+		ExpressionAttributeValues={':procesado': storage.url(diseño_procesado_nombre), ':estado': True}
+		)
+ 
+
 
     #send_mail(
     #    "Tu diseño ha sido procesado.", 

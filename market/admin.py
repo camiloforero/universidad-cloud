@@ -38,37 +38,5 @@ class DesignMatchAdminSite(admin.AdminSite):
 admin_site = DesignMatchAdminSite(name="design_match_admin")
 
 
-@admin.register(models.Proyecto, site=admin_site)
-class ProyectoAdmin(admin.ModelAdmin):
-    fields = ('nombre', 'descripción', 'valor_estimado')
-    readonly_fields = ('num_diseños', 'ver_diseños')
-    list_display = ('__str__', 'valor_estimado', 'num_diseños', 'ver_diseños')
-
-    def num_diseños(self, instance):
-        cantidad = instance.diseños.count()
-        return cantidad
-    num_diseños.short_description = "Número de diseños"
-
-    def ver_diseños(self, instance):
-        return mark_safe(
-            '<a href="%s">Ver todos los diseños</a>' %
-            reverse_lazy(
-                'design_match_admin:listaDiseños',
-                kwargs={'id_proyecto': "%s" % instance.pk}))
-
-    ver_diseños.short_description = "Ver todos los diseños"
-
-    def get_queryset(self, request):
-        qs = super(ProyectoAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(autor=request.user.administrador)
-
-    def save_model(self, request, obj, form, change):
-        obj.autor = request.user.administrador
-        super(ProyectoAdmin, self).save_model(request, obj, form, change)
-
-
-admin_site.register(Group)
 
 # Register your models here.

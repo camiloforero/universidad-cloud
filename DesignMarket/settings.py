@@ -101,10 +101,15 @@ WSGI_APPLICATION = 'DesignMarket.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/ubuntu/django/projects/universidad-cloud/designmatch',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'designmarket',
+        'USER': 'cloud',
+        'PASSWORD': private.DB_PASSWORD,
+        'HOST': private.DB_HOST,
+        'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -172,6 +177,7 @@ AWS_STORAGE_BUCKET_NAME = 'iter3-camiloforero'
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_FILE_OVERWRITE = False
 AWS_LOCATION = 'Diseños'
+AWS_S3_CUSTOM_DOMAIN = 'media-iter3.camiloforero.me'
 
 
 #Cache
